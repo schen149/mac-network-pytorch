@@ -60,7 +60,7 @@ def train(epoch,
         loss = criterion(output, answer)
         constraint_loss = constraint_loss_fn_calc(mid_layer_attn, c_mask)
         # constraint_loss = constraint_loss.detach()
-        # loss = loss + constraints_alpha * constraint_loss / batch_size
+        loss = loss + constraints_alpha * constraint_loss / batch_size
         loss.backward()
         optimizer.step()
         correct = output.detach().argmax(1) == answer
