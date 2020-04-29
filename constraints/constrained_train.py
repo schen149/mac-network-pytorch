@@ -153,6 +153,6 @@ if __name__ == '__main__':
 
 
         with open(
-            'checkpoint/checkpoint_{}_orig.model'.format(str(epoch + 1).zfill(2)), 'wb'
+            '../checkpoint/checkpoint_{}_orig.model'.format(str(epoch + 1).zfill(2)), 'wb'
         ) as f:
             torch.save(net_running.state_dict(), f)

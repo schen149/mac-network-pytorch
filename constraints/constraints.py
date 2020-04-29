@@ -16,7 +16,7 @@ class Constraint:
     def generate_constraints_masks(cls,
                                    question_toks: List[str],
                                    scene_data: Dict,
-                                   img: torch.tensor) -> torch.tensor:
+                                   img: torch.tensor) -> np.ndarray:
         raise NotImplementedError
 
 
@@ -41,7 +41,7 @@ class RightConstraint(Constraint):
                                    question_toks: List[str],
                                    scene_data: Dict,
                                    img: torch.tensor  # Orig img after transformation - 3 x 224 x 224
-                                   ) -> torch.tensor:
+                                   ) -> np.ndarray:
 
         _mask = np.zeros((14, 14))
 
@@ -56,7 +56,7 @@ class LeftConstraint(Constraint):
     def generate_constraints_masks(cls,
                                    question_toks: List[str],
                                    scene_data: Dict,
-                                   img: torch.tensor) -> torch.tensor:
+                                   img: torch.tensor) -> np.ndarray:
 
         _mask = np.zeros((14, 14))
 
