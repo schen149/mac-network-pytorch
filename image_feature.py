@@ -48,13 +48,16 @@ class CLEVR(Dataset):
     def __len__(self):
         return self.length
 
-batch_size = 50
 
-resnet = resnet101(True).cuda()
-resnet.eval()
-resnet.forward = forward.__get__(resnet, ResNet)
 
 def create_dataset(split):
+
+    batch_size = 50
+
+    resnet = resnet101(True).cuda()
+    resnet.eval()
+    resnet.forward = forward.__get__(resnet, ResNet)
+
     dataloader = DataLoader(CLEVR(sys.argv[1], split), batch_size=batch_size,
                             num_workers=4)
 
@@ -74,5 +77,8 @@ def create_dataset(split):
 
     f.close()
 
-create_dataset('val')
-create_dataset('train')
+
+if __name__ == '__main__':
+
+    create_dataset('val')
+    create_dataset('train')

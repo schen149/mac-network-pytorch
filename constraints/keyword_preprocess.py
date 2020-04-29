@@ -9,8 +9,14 @@ import tqdm
 # from PIL import Image
 # from transforms import Scale
 
+"""
+Only keep questions with certain keywords
+"""
+keywords = ["left", "right"]
+
 
 def process_question(root, split, word_dic=None, answer_dic=None):
+
     if word_dic is None:
         word_dic = {}
 
@@ -28,6 +34,15 @@ def process_question(root, split, word_dic=None, answer_dic=None):
     for question in tqdm.tqdm(data['questions']):
         words = nltk.word_tokenize(question['question'])
         question_token = []
+
+        contains_keywords = False
+        for kw in keywords:
+            if kw in words:
+                contains_keywords = True
+                break
+
+        if not contains_keywords:
+            continue
 
         for word in words:
             try:
@@ -51,12 +66,22 @@ def process_question(root, split, word_dic=None, answer_dic=None):
         result.append((question['image_filename'], question_token, answer,
                     question['question_family_index']))
 
-    with open(f'data/{split}.pkl', 'wb') as f:
+    if not os.path.exists('data/keywords_only'):
+        os.makedirs('data/keywords_only')
+
+    print("Number of exmaples in {} split with keywords {}:\t{}".format(split, keywords, len(result)))
+    with open(f'data/keywords_only/{split}.pkl', 'wb') as f:
         pickle.dump(result, f)
 
     return word_dic, answer_dic
 
+
 if __name__ == '__main__':
+
+    if len(sys.argv) != 2:
+        print("Usage: python ... [CLEVR-dir]", file=sys.stderr)
+        exit(1)
+
     root = sys.argv[1]
 
     word_dic, answer_dic = process_question(root, 'train')
